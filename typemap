@@ -1,0 +1,38 @@
+TYPEMAP
+Template                    O_TEMPLATE
+Template *                  O_TEMPLATE
+TemplateDictionary          O_DICT
+TemplateDictionary *        O_DICT
+TemplateState               T_ENUM
+string                      STRING
+Strip                       T_ENUM
+
+INPUT
+STRING
+  {
+    STRLEN len;
+    const char * tmp = SvPV($arg, len);
+    $var.assign(tmp, len);
+  }
+O_TEMPLATE
+  if( sv_isobject($arg) && sv_derived_from($arg, \"Template::CTemplate::Template\") )
+    $var = ($type)SvIV((SV*)SvRV( $arg ));
+  else{
+    warn( \"${Package}::$func_name() -- $var is not a \\\"Template::CTemplate::Template\\\" object\" );
+    XSRETURN_UNDEF;
+  }
+O_DICT
+  if( sv_isobject($arg) && sv_derived_from($arg, \"Template::CTemplate::Dictionary\") )
+    $var = ($type)SvIV((SV*)SvRV( $arg ));
+  else{
+    warn( \"${Package}::$func_name() -- $var is not a \\\"Template::CTemplate::Dictionary\\\" object\" );
+    XSRETURN_UNDEF;
+  }
+
+OUTPUT
+STRING
+  sv_setpvn((SV*)$arg, (char *) ($var.data()), ($var.size()));
+O_TEMPLATE
+  sv_setref_pv( $arg, "Template::CTemplate::Template", (void*)$var );
+O_DICT
+  sv_setref_pv( $arg, "Template::CTemplate::Dictionary", (void*)$var );

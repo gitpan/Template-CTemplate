@@ -1,0 +1,6 @@
+Revision history for Perl extension Template::CTemplate.
+
+0.01  Sun Oct 28 17:47:21 2007
+	- original version; created by h2xs 1.23 with options
+		-A -n Template::CTemplate
+
